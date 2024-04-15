@@ -65,7 +65,7 @@ class Task(UserControl):
     async def save_clicked(self, e):
         self.display_task.label = self.edit_name.value
 
-        response = requests.put(f"https://todoyar.liara.run/todo/{self.task_id}/", headers={
+        response = requests.put(f"https://todoyaar.liara.run/todo/{self.task_id}/", headers={
             'Authorization': f'Token {token}',
             'Content-Type': 'application/json'
         }, data=json.dumps({
@@ -175,7 +175,7 @@ class TodoApp(UserControl):
         await self.page.update_async()
 
     async def bs_yes(self):
-        requests.delete("https://todoyar.liara.run/account/delete/", headers={
+        requests.delete("https://todoyaar.liara.run/account/delete/", headers={
             'Authorization': f'Token {token}'
         })
         await self.page.client_storage.clear_async()
@@ -189,7 +189,7 @@ class TodoApp(UserControl):
 
     async def add_clicked(self, e):
         if self.new_task.value:
-            requests.post("https://todoyar.liara.run/todo/", headers={
+            requests.post("https://todoyaar.liara.run/todo/", headers={
                 'Authorization': f'Token {token}',
                 'Content-Type': 'application/json'
             }, data=json.dumps({
@@ -197,7 +197,7 @@ class TodoApp(UserControl):
                 "tik": "False"
             }))
 
-        respons = requests.get("https://todoyar.liara.run/todo/", headers={
+        respons = requests.get("https://todoyaar.liara.run/todo/", headers={
             'Authorization': f'Token {token}'
         }, data='')
 
@@ -213,7 +213,7 @@ class TodoApp(UserControl):
 
     async def task_status_change(self, task, task_id='', tik=''):
         if task_id != '':
-            requests.put(f"https://todoyar.liara.run/todo/{task_id}/", headers={
+            requests.put(f"https://todoyaar.liara.run/todo/{task_id}/", headers={
                 'Authorization': f'Token {token}',
                 'Content-Type': 'application/json'
             }, data=json.dumps({
@@ -228,7 +228,7 @@ class TodoApp(UserControl):
         self.tasks.controls.remove(task)
         await self.update_async()
         if id != '':
-            requests.delete(f"https://todoyar.liara.run/todo/{id}/", headers={
+            requests.delete(f"https://todoyaar.liara.run/todo/{id}/", headers={
                 'Authorization': f'Token {token}'
             })
 
@@ -238,7 +238,7 @@ class TodoApp(UserControl):
     async def clear_clicked(self, e):
         for task in self.tasks.controls[:]:
             if task.completed:
-                requests.delete(f"https://todoyar.liara.run/todo/{task.task_id}/", headers={
+                requests.delete(f"https://todoyaar.liara.run/todo/{task.task_id}/", headers={
                     'Authorization': f'Token {token}'
                 })
                 await self.task_delete(task)
@@ -270,7 +270,7 @@ async def main(page: Page):
                     "حداقل کاراکتر برای نام کاربری 5 حرف و برای پسورد 8 حرف است", text_align="RIGHT")
                 page.snack_bar.open = True
             else:
-                response = requests.post("https://todoyar.liara.run/account/login/", headers={
+                response = requests.post("https://todoyaar.liara.run/account/login/", headers={
                     'Content-Type': 'application/json'},
                     data=json.dumps({
                         "username": login_usern,
@@ -329,7 +329,7 @@ async def main(page: Page):
                 page.snack_bar.open = True
             else:
 
-                response = requests.post("https://todoyar.liara.run/account/register/", data={
+                response = requests.post("https://todoyaar.liara.run/account/register/", data={
                     "username": str(username), "password": str(pass1)})
 
                 if response:
