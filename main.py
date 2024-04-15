@@ -2,7 +2,6 @@ from flet import Container, BottomSheet, AppView, app, SnackBar, PopupMenuItem, 
 import requests
 import json
 
-
 class Task(UserControl):
     def __init__(self, task_name, task_status_change, task_delete, task_id, completed):
         super().__init__()
@@ -123,8 +122,6 @@ class TodoApp(UserControl):
                                     text="همگام سازی مجدد", icon=icons.CLOUD_SYNC, on_click=self.add_clicked),
                                 PopupMenuItem(
                                     text="خروج از حساب کاربری", icon=icons.EXIT_TO_APP, on_click=self.forget_user),
-                                # PopupMenuItem(
-                                #     text="تغییر پسورد", icon=icons.PASSWORD_OUTLINED, on_click=self.delete_account),
                                 PopupMenuItem(
                                     text="حذف حساب کاربری", icon=icons.DELETE, on_click=self.delete_account),
                             ],
@@ -191,9 +188,7 @@ class TodoApp(UserControl):
         await self.page.update_async()
 
     async def add_clicked(self, e):
-        # ایده ای هست که میتونی مستقیما از کلاس تسک این کارارو انجام بدی منظورم گرفتن و فرستادن ای پی آی هست
         if self.new_task.value:
-            # else:
             requests.post("https://todoyar.liara.run/todo/", headers={
                 'Authorization': f'Token {token}',
                 'Content-Type': 'application/json'
@@ -212,8 +207,6 @@ class TodoApp(UserControl):
             task = Task(i.get("title"),
                         self.task_status_change, self.task_delete, i.get("id"), completed=i.get('tik'))
             self.tasks.controls.append(task)
-            # await self.new_task.focus_async()
-            # await self.update_async()
         self.new_task.value = ""
         await self.new_task.focus_async()
         await self.update_async()
@@ -263,10 +256,8 @@ class TodoApp(UserControl):
                 count += 1
         self.items_levalue = f"{count} تعداد کارهای ناتمام :"
         await super().update_async()
-
-
 async def main(page: Page):
-    page.title = "تودویار | Todoyar"
+    page.title = "تودویار | Todoyaar"
     page.horizontal_alignment = CrossAxisAlignment.CENTER
     page.scroll = ScrollMode.ADAPTIVE
 
@@ -313,7 +304,6 @@ async def main(page: Page):
                     Text("""آیا از حذف حساب کاربری خود اطمینان دارید؟
                             این عمل قابل بازگشت نخواهد بود
                             تمامی یادداشت های شما از بین خواهند رفت""", text_align="RIGHT"),
-
                     Row(
                         [
                             ElevatedButton("بله", color="red",
@@ -322,11 +312,6 @@ async def main(page: Page):
                         ],
                     ),
                 ],
-
-
-
-
-
                 tight=True,
             ),
             padding=10,
@@ -357,7 +342,6 @@ async def main(page: Page):
                     page.snack_bar.content = Text(
                         "اکانت شما ساخته شد. حالا وارد شوید", text_align="RIGHT")
                     page.snack_bar.open = True
-                    # page.update()
 
                 else:
                     page.snack_bar.content = Text(
@@ -370,9 +354,6 @@ async def main(page: Page):
             page.snack_bar.content = Text(
                 "پر کردن صحیح فیلد ها ضروری است", text_align="RIGHT")
             page.snack_bar.open = True
-
-        # اگر مقدار تب که الان برابر 1 هست برابر 0 بشه میره توی لاگین و مقدار اونارو میاره
-        # dlg_modal.open = False
         await page.update_async()
 
     page.snack_bar = SnackBar(
@@ -476,9 +457,6 @@ async def main(page: Page):
 
     page.dialog = dlg_modal
     page.bottom_sheet = bs
-    # 3
-    # await page.client_storage.clear_async()
-    # 3
     if await page.client_storage.contains_key_async("access_token"):
         acs_tok = await page.client_storage.get_async("access_token")
         TodoApp.sync(acs_tok)
@@ -486,5 +464,4 @@ async def main(page: Page):
         dlg_modal.open = True
     await page.add_async(TodoApp())
 
-app(main)
-# app(target=main, view=AppView.WEB_BROWSER, assets_dir="assets")
+app(target=main, view=AppView.WEB_BROWSER, assets_dir="assets")
